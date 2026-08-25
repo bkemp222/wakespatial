@@ -24,7 +24,7 @@ const POINT_COUNT =
   isTouchDevice ? 800 : 1000;
 
 const REACTION_RADIUS =
-  isTouchDevice ? 120 : 140;
+  isTouchDevice ? 60 : 90;
 
 const BASE_OPACITY = 0.003;
 
