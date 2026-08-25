@@ -147,10 +147,11 @@ body {
 
   pointer-events: none;
 
-  opacity: 0.08;
+  /* Dormant state */
+  opacity: 0.12;
 
-  transition:
-    opacity 1.2s ease;
+  /* Wake / sleep transition */
+  transition: opacity 0.65s ease;
 }
 
 .brand {

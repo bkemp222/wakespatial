@@ -225,13 +225,16 @@ function updateInteraction(
    * Wake hero
    */
 
-  if (!awake) {
+if (
+  !awake &&
+  !isTouchDevice
+) {
 
-    hero.style.opacity = 1;
+  hero.style.opacity = 1;
 
-    awake = true;
+  awake = true;
 
-  }
+}
 
 
   /*
@@ -322,18 +325,17 @@ window.addEventListener(
       return;
     }
 
-
     touching = true;
-
 
     const touch =
       event.touches[0];
-
 
     if (!touch) {
       return;
     }
 
+    // WAKE UP
+    hero.style.opacity = 1;
 
     updateInteraction(
       touch.clientX,
@@ -345,7 +347,6 @@ window.addEventListener(
     passive: true
   }
 );
-
 
 window.addEventListener(
   "touchmove",
@@ -376,7 +377,6 @@ window.addEventListener(
   }
 );
 
-
 window.addEventListener(
   "touchend",
   () => {
@@ -385,6 +385,9 @@ window.addEventListener(
 
     lastInteractionTime =
       performance.now();
+
+    // GO DORMANT
+    hero.style.opacity = 0.12;
 
   },
   {
