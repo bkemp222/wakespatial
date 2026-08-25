@@ -68,17 +68,6 @@ const TRAIL_DECAY = 0.78;
 
 
 /*
- * Mobile autonomous movement
- */
-
-const AUTO_SPEED = 0.003;
-
-const AUTO_RADIUS_X = 0.28;
-
-const AUTO_RADIUS_Y = 0.18;
-
-
-/*
  * Green → yellow-green palette
  */
 
@@ -416,75 +405,72 @@ function animate() {
   time += 0.01;
 
 
-  // =========================
-  // MOBILE AUTONOMOUS PRESENCE
-  // =========================
+// =========================
+// MOBILE AUTONOMOUS PRESENCE
+// =========================
+
+if (
+  isTouchDevice &&
+  !touching
+) {
+
+  const idleTime =
+    performance.now() -
+    lastInteractionTime;
+
+
+  /*
+   * Wait briefly after release
+   */
 
   if (
-    isTouchDevice &&
-    !touching
+    idleTime > 1200
   ) {
 
-    const idleTime =
-      performance.now() -
-      lastInteractionTime;
+    /*
+     * Slowly drift from the
+     * current position instead
+     * of jumping to a new orbit.
+     */
+
+    targetX +=
+      Math.sin(
+        time * 0.55
+      ) * 0.18;
+
+    targetY +=
+      Math.cos(
+        time * 0.42
+      ) * 0.18;
 
 
     /*
-     * After finger leaves screen,
-     * wait briefly before the
-     * autonomous movement returns.
+     * Keep it safely on screen
      */
 
-    if (
-      idleTime > 1200 ||
-      !userHasInteracted
-    ) {
+    const margin = 80;
 
-      const centerX =
-        window.innerWidth / 2;
+    targetX =
+      Math.max(
+        margin,
+        Math.min(
+          window.innerWidth - margin,
+          targetX
+        )
+      );
 
-      const centerY =
-        window.innerHeight / 2;
-
-
-      const radiusX =
-        window.innerWidth *
-        AUTO_RADIUS_X;
-
-      const radiusY =
-        window.innerHeight *
-        AUTO_RADIUS_Y;
-
-
-      /*
-       * Organic figure-eight-ish
-       * movement instead of a
-       * perfect obvious circle.
-       */
-
-      targetX =
-        centerX +
-        Math.sin(
-          time *
-          AUTO_SPEED *
-          100
-        ) *
-        radiusX;
-
-
-      targetY =
-        centerY +
-        Math.sin(
-          time *
-          AUTO_SPEED *
-          137
-        ) *
-        radiusY;
-
-    }
+    targetY =
+      Math.max(
+        margin,
+        Math.min(
+          window.innerHeight - margin,
+          targetY
+        )
+      );
 
   }
+
+}
 
 
   // =========================
